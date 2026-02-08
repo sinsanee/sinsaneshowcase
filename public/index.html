@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinsane - Counter-Strike Skins Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cherry-pink: #FFB7C5;
+            --white: #FFFFFF;
+            --black: #000000;
+            --dark-pink: #FF8FA3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        /* Navbar Styles */
+        nav {
+            background-color: var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            gap: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .site-name {
+            color: var(--cherry-pink);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cherry-pink);
+            color: var(--white);
+            background-color: transparent;
+        }
+
+        .auth-btn:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-btn.register {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-btn.register:hover {
+            background-color: var(--dark-pink);
+        }
+
+        /* Banner Styles */
+        .banner {
+            width: 100%;
+            height: 500px;
+            background-image: url('img/banner.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .banner-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .banner-logo {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+
+        .banner-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .banner h1 {
+            font-size: 3.5rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .banner p {
+            font-size: 1.3rem;
+            color: var(--white);
+            margin-top: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            color: var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-section p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            color: var(--cherry-pink);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .banner {
+                height: 400px;
+            }
+
+            .banner h1 {
+                font-size: 2rem;
+            }
+
+            .banner-logo {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .welcome-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <span class="site-name">sinsane.org</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="loadout.html">Loadout</a></li>
+            <li><a href="links.html">Links</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="login.html" class="auth-btn">Login</a>
+            <a href="register.html" class="auth-btn register">Register</a>
+        </div>
+    </nav>
+
+    <!-- Banner Section -->
+    <div class="banner">
+        <div class="banner-content">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <section class="welcome-section">
+            <h2>Welcome to Sinsane</h2>
+            <p>
+                Explore my carefully curated collection of Counter-Strike skins. 
+                From rare knives to exotic weapon finishes, discover the artistry 
+                and value behind each piece in my inventory. Check out my loadout, 
+                read the latest updates on my blog, and find useful links to enhance 
+                your CS experience.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span class="copyright">Sinsane</span>. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add active state to current page link
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === currentPage || 
+                (currentPage === 'index.html' && link.getAttribute('href') === '#home')) {
+                link.style.backgroundColor = 'var(--cherry-pink)';
+                link.style.color = 'var(--black)';
+            }
+        });
+    </script>
+</body>
+</html>

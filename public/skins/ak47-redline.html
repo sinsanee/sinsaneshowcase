@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AK-47 Redline - Sinsane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cherry-pink: #FFB7C5;
+            --white: #FFFFFF;
+            --black: #000000;
+            --dark-pink: #FF8FA3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        /* Navbar Styles */
+        nav {
+            background-color: var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .site-name {
+            color: var(--cherry-pink);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        /* Skin Container */
+        main {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .skin-header {
+            margin-bottom: 2rem;
+            border-bottom: 3px solid var(--cherry-pink);
+            padding-bottom: 1.5rem;
+        }
+
+        .skin-title {
+            font-size: 3rem;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .skin-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .skin-nametag {
+            font-size: 1.1rem;
+            color: var(--dark-pink);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .skin-stickers {
+            font-size: 1rem;
+            color: #888;
+        }
+
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--cherry-pink);
+            color: var(--black);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: var(--dark-pink);
+            transform: translateX(-5px);
+        }
+
+        /* Description */
+        .skin-description {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        .skin-description p {
+            margin-bottom: 1rem;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            border: 3px solid var(--cherry-pink);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 183, 197, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            font-size: 3rem;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--cherry-pink);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: var(--white);
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .lightbox-nav:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .lightbox-prev {
+            left: 2rem;
+        }
+
+        .lightbox-next {
+            right: 2rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            color: var(--cherry-pink);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .skin-title {
+                font-size: 2rem;
+            }
+
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .lightbox-nav {
+                font-size: 2rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .lightbox-prev {
+                left: 1rem;
+            }
+
+            .lightbox-next {
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <span class="site-name">sinsane.org</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../blog.html">Blog</a></li>
+            <li><a href="../loadout.html">Loadout</a></li>
+            <li><a href="../links.html">Links</a></li>
+            <li><a href="../changelog.html">Changelog</a></li>
+        </ul>
+    </nav>
+
+    <!-- Skin Content -->
+    <main>
+        <a href="../loadout.html" class="back-button">← Back to Loadout</a>
+
+        <div class="skin-header">
+            <h1 class="skin-title">AK-47 | Redline</h1>
+            <p class="skin-subtitle">Rifle • Field Tested • Float: 0.3529 • Pattern 741</p>
+            <p class="skin-nametag">🏷️ "Unfazedd"</p>
+            <p class="skin-stickers">🎨 Stickers: 4x FaZe Clan (Holo) | MLG Columbus 2016</p>
+        </div>
+
+        <div class="skin-description">
+            <p>
+                Back in the day, i used to own a AK-47 Redline. It was my first ever real craft. I put 4x FaZe clan london 2018 stickers on it. This skin is supposed to be in upgrade of that AK.
+            </p>
+            <p>
+                FaZe clan happens to be my favorite team. And off course i had to own an AK with those stickers. Hence i got this one. I've owned it for a while now and it never gets old.
+            </p>
+        </div>
+
+        <!-- Image Gallery -->
+        <div class="image-gallery" id="gallery">
+            <div class="gallery-item" data-index="0">
+                <img src="img/ak47-redline-1.jpg" alt="AK-47 Redline View 1">
+            </div>
+            <div class="gallery-item" data-index="1">
+                <img src="img/ak47-redline-1.jpg" alt="AK-47 Redline View 2">
+            </div>
+            <div class="gallery-item" data-index="2">
+                <img src="img/ak47-redline-1.jpg" alt="AK-47 Redline View 3">
+            </div>
+        </div>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" id="lightbox-close">&times;</span>
+        <span class="lightbox-nav lightbox-prev" id="lightbox-prev">‹</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Fullscreen view">
+        </div>
+        <span class="lightbox-nav lightbox-next" id="lightbox-next">›</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span class="copyright">Sinsane</span>. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        
+        let currentIndex = 0;
+        const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
+
+        // Open lightbox
+        galleryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                currentIndex = parseInt(this.dataset.index);
+                openLightbox();
+            });
+        });
+
+        function openLightbox() {
+            lightbox.classList.add('active');
+            lightboxImg.src = images[currentIndex];
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Navigation
+        lightboxPrev.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            lightboxImg.src = images[currentIndex];
+        });
+
+        lightboxNext.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % images.length;
+            lightboxImg.src = images[currentIndex];
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                lightboxImg.src = images[currentIndex];
+            } else if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % images.length;
+                lightboxImg.src = images[currentIndex];
+            }
+        });
+
+        // Add active state to current page link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === '../loadout.html') {
+                link.style.backgroundColor = 'var(--cherry-pink)';
+                link.style.color = 'var(--black)';
+            }
+        });
+    </script>
+</body>
+</html>

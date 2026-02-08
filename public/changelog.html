@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog - Sinsane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cherry-pink: #FFB7C5;
+            --white: #FFFFFF;
+            --black: #000000;
+            --dark-pink: #FF8FA3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        /* Navbar Styles */
+        nav {
+            background-color: var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            gap: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .site-name {
+            color: var(--cherry-pink);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cherry-pink);
+            color: var(--white);
+            background-color: transparent;
+        }
+
+        .auth-btn:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-btn.register {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-btn.register:hover {
+            background-color: var(--dark-pink);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* Timeline */
+        .changelog-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .changelog-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--cherry-pink);
+        }
+
+        /* Changelog Entry */
+        .changelog-entry {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+        }
+
+        .changelog-entry::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: var(--cherry-pink);
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 3px var(--cherry-pink);
+        }
+
+        .changelog-header {
+            margin-bottom: 1rem;
+        }
+
+        .changelog-version {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--black);
+            margin-bottom: 0.3rem;
+        }
+
+        .changelog-date {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .changelog-content {
+            background-color: #f9f9f9;
+            border: 2px solid var(--cherry-pink);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .changelog-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .changelog-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .changelog-section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .changelog-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .changelog-list li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .changelog-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--cherry-pink);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            color: var(--cherry-pink);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .changelog-timeline {
+                padding-left: 1rem;
+            }
+
+            .changelog-entry {
+                padding-left: 1.5rem;
+            }
+
+            .changelog-entry::before {
+                left: -2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <span class="site-name">sinsane.org</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="loadout.html">Loadout</a></li>
+            <li><a href="links.html">Links</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="login.html" class="auth-btn">Login</a>
+            <a href="register.html" class="auth-btn register">Register</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="page-header">
+            <h1>Changelog</h1>
+            <p>Track the evolution of sinsane.org</p>
+        </div>
+
+        <!-- Changelog Timeline -->
+        <div class="changelog-timeline">
+
+            <!-- Version 1.0.0 - Example Entry -->
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <h2 class="changelog-version">Version 1.0.0</h2>
+                    <p class="changelog-date">January 16, 2026</p>
+                </div>
+                <div class="changelog-content">
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">🎉 Added</h3>
+                        <ul class="changelog-list">
+                            <li>Initial website launch with homepage, blog, loadout, and links pages</li>
+                            <li>Skin showcase system with lightbox image galleries</li>
+                            <li>Article system with sorting functionality (newest, oldest, alphabetical)</li>
+                            <li>Responsive design for mobile and desktop</li>
+                            <li>Cherry blossom pink, white, and black color scheme</li>
+                        </ul>
+                    </div>
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">📝 Changed</h3>
+                        <ul class="changelog-list">
+                            <li>Updated navigation bar with sticky positioning</li>
+                            <li>Improved hover effects across all pages</li>
+                        </ul>
+                    </div>
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">🐛 Fixed</h3>
+                        <ul class="changelog-list">
+                            <li>Fixed logo sizing issues on all pages</li>
+                            <li>Resolved mobile navigation layout problems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more changelog entries below -->
+            <!-- 
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <h2 class="changelog-version">Version X.X.X</h2>
+                    <p class="changelog-date">Month Day, Year</p>
+                </div>
+                <div class="changelog-content">
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">🎉 Added</h3>
+                        <ul class="changelog-list">
+                            <li>New feature description</li>
+                        </ul>
+                    </div>
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">📝 Changed</h3>
+                        <ul class="changelog-list">
+                            <li>Change description</li>
+                        </ul>
+                    </div>
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">🐛 Fixed</h3>
+                        <ul class="changelog-list">
+                            <li>Bug fix description</li>
+                        </ul>
+                    </div>
+                    <div class="changelog-section">
+                        <h3 class="changelog-section-title">🗑️ Removed</h3>
+                        <ul class="changelog-list">
+                            <li>Removed feature description</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            -->
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span class="copyright">Sinsane</span>. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Add active state to current page link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === 'changelog.html') {
+                link.style.backgroundColor = 'var(--cherry-pink)';
+                link.style.color = 'var(--black)';
+            }
+        });
+    </script>
+</body>
+</html>

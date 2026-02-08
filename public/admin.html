@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Sinsane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+    .bulk-delete-btn {
+    background-color: #d32f2f;
+    color: white;
+    display: none;
+    }
+
+    .bulk-delete-btn.show {
+        display: inline-block;
+    }
+
+    .bulk-delete-btn:hover {
+        background-color: #b71c1c;
+    }
+
+    .select-checkbox {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .file-upload-area {
+        border: 2px dashed var(--cherry-pink);
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-upload-area:hover {
+        background-color: #fff0f3;
+    }
+
+    .file-upload-area.dragover {
+        background-color: var(--cherry-pink);
+        border-color: var(--dark-pink);
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .uploaded-file {
+        margin-top: 1rem;
+        padding: 0.5rem;
+        background-color: #e8f5e9;
+        border-radius: 5px;
+        color: #2e7d32;
+        font-weight: bold;
+    }
+
+    .screenshot-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .screenshot-item {
+        position: relative;
+        width: 150px;
+    }
+
+    .screenshot-item img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid var(--cherry-pink);
+    }
+
+    .screenshot-remove {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #d32f2f;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .screenshot-remove:hover {
+        background-color: #b71c1c;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+        :root {
+            --cherry-pink: #FFB7C5;
+            --white: #FFFFFF;
+            --black: #000000;
+            --dark-pink: #FF8FA3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: var(--black);
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .site-name {
+            color: var(--cherry-pink);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .username {
+            color: var(--white);
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: var(--cherry-pink);
+            color: var(--black);
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--dark-pink);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--black);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--cherry-pink);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background-color: transparent;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab:hover {
+            color: var(--dark-pink);
+        }
+
+        .tab.active {
+            color: var(--black);
+            border-bottom-color: var(--cherry-pink);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Blog Posts Management */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--cherry-pink);
+            color: var(--black);
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background-color: var(--dark-pink);
+        }
+
+        /* Posts Table */
+        .posts-table {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--cherry-pink);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+            color: var(--black);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background-color: #5B9BD5;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #4A8AC4;
+        }
+
+        .btn-delete {
+            background-color: #d32f2f;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--cherry-pink);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: var(--black);
+        }
+
+        .close-btn {
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--black);
+            background: none;
+            border: none;
+        }
+
+        .close-btn:hover {
+            color: var(--cherry-pink);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--black);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--cherry-pink);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--dark-pink);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--cherry-pink);
+            color: var(--black);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--dark-pink);
+        }
+
+        .error-message {
+            color: #d32f2f;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="site-name">Admin Dashboard</div>
+        <div class="admin-info">
+            <span class="username" id="admin-username">Loading...</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Content Management</h1>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="blog-posts">Blog Posts</button>
+            <button class="tab" data-tab="loadout">Loadout Items</button>
+            <button class="tab" data-tab="users">User Management</button>
+            <button class="tab" data-tab="changelog">Changelog</button>
+        </div>
+
+        <!-- Blog Posts Tab -->
+        <div class="tab-content active" id="blog-posts">
+            <div class="action-bar">
+                <h2>Manage Blog Posts</h2>
+                <button class="add-btn" onclick="openAddModal()">+ Add New Post</button>
+            </div>
+
+            <div class="posts-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="posts-table-body">
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 2rem;">Loading posts...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="loadout">
+        <div class="action-bar">
+            <h2>Loadout Items</h2>
+            <button class="add-btn" onclick="openAddLoadoutModal()">Add New Item</button>
+        </div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Weapon</th>
+                        <th>Skin</th>
+                        <th>Category</th>
+                        <th>Side</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="loadout-table-body">
+                    <tr><td colspan="5" style="text-align: center; padding: 2rem;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-content" id="users">
+    <div class="action-bar">
+        <h2>User Management</h2>
+        <button class="bulk-delete-btn" id="bulk-delete-btn" onclick="bulkDeleteUsers()">Delete Selected</button>
+    </div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" class="select-checkbox" id="select-all-users"></th>
+                    <th>Username</th>
+                    <th>Admin</th>
+                    <th>Registered</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="users-table-body">
+                <tr><td colspan="5" style="text-align: center; padding: 2rem;">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="tab-content" id="changelog">
+    <div class="action-bar">
+        <h2>Changelog</h2>
+        <button class="add-btn" onclick="openAddChangelogModal()">Add New Entry</button>
+    </div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="changelog-table-body">
+                <tr><td colspan="3" style="text-align: center; padding: 2rem;">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings">
+            <div class="action-bar">
+                <h2>Settings</h2>
+            </div>
+            <div style="padding: 2rem; background: white; border-radius: 10px;">
+                <p>Settings coming soon...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Post Modal -->
+    <div class="modal" id="post-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Add New Post</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <form id="post-form">
+                <input type="hidden" id="post-id">
+
+                <div class="form-group">
+                    <label for="post-title">Title *</label>
+                    <input type="text" id="post-title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-date">Date *</label>
+                    <input type="date" id="post-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-description">Short Description *</label>
+                    <textarea id="post-description" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-content">Content *</label>
+                    <textarea id="post-content" required></textarea>
+                    <small style="color: #666; font-size: 0.9rem;">
+                        Tip: Use double line breaks for new paragraphs. Single line breaks become <br> tags.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Thumbnail Image</label>
+                    <div class="file-upload-area" id="post-thumbnail-upload">
+                        <p>Click or drag image here to upload</p>
+                        <input type="file" class="file-input" id="post-thumbnail-file" accept="image/*">
+                    </div>
+                    <input type="hidden" id="post-thumbnail">
+                    <div id="post-thumbnail-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-thumbnail">Thumbnail URL</label>
+                    <input type="text" id="post-thumbnail" placeholder="articles/img/thumbnail.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="post-slug">URL Slug *</label>
+                    <input type="text" id="post-slug" placeholder="my-article-title" required>
+                    <small style="color: #666; font-size: 0.9rem;">This will be the URL: article.html?slug=your-slug</small>
+                </div>
+
+                <div class="error-message" id="form-error"></div>
+
+                <button type="submit" class="submit-btn">Save Post</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="loadout-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="loadout-modal-title">Add New Loadout Item</h2>
+            <button class="close-btn" onclick="closeLoadoutModal()">&times;</button>
+        </div>
+        <form id="loadout-form">
+            <input type="hidden" id="loadout-id">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="loadout-weapon">Weapon Name *</label>
+                    <input type="text" id="loadout-weapon" placeholder="AK-47" required>
+                </div>
+                <div class="form-group">
+                    <label for="loadout-skin">Skin Name *</label>
+                    <input type="text" id="loadout-skin" placeholder="Fire Serpent" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="loadout-category">Category *</label>
+                    <select id="loadout-category" required>
+                        <option value="">Select Category</option>
+                        <option value="pistols">Pistols</option>
+                        <option value="midtier">Mid-Tier</option>
+                        <option value="rifles">Rifles</option>
+                        <option value="equipment">Equipment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="loadout-side">Side *</label>
+                    <select id="loadout-side" required>
+                        <option value="">Select Side</option>
+                        <option value="both">Both</option>
+                        <option value="t">Terrorist</option>
+                        <option value="ct">Counter-Terrorist</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="loadout-float">Float Value</label>
+                    <input type="text" id="loadout-float" placeholder="0.0015">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-group">
+                        <input type="checkbox" id="loadout-stattrak">
+                        <span>StatTrak™</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="loadout-description">Description</label>
+                <textarea id="loadout-description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Screenshots</label>
+                <div class="file-upload-area" id="loadout-screenshot-upload">
+                    <p>Click or drag images here (multiple files allowed)</p>
+                    <input type="file" class="file-input" id="loadout-screenshot-file" accept="image/*" multiple>
+                </div>
+                <div class="screenshot-list" id="loadout-screenshots"></div>
+            </div>
+            <div class="error-message" id="loadout-form-error"></div>
+            <button type="submit" class="submit-btn">Save Loadout Item</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="user-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Edit User</h2>
+            <button class="close-btn" onclick="closeUserModal()">&times;</button>
+        </div>
+        <form id="user-form">
+            <input type="hidden" id="user-id">
+            <div class="form-group">
+                <label for="user-username">Username *</label>
+                <input type="text" id="user-username" required>
+            </div>
+            <div class="error-message" id="user-form-error"></div>
+            <button type="submit" class="submit-btn">Update User</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="changelog-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="changelog-modal-title">Add New Changelog</h2>
+            <button class="close-btn" onclick="closeChangelogModal()">&times;</button>
+        </div>
+        <form id="changelog-form">
+            <input type="hidden" id="changelog-id">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="changelog-version">Version *</label>
+                    <input type="text" id="changelog-version" placeholder="1.0.0" required>
+                </div>
+                <div class="form-group">
+                    <label for="changelog-date">Date *</label>
+                    <input type="date" id="changelog-date" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="changelog-added">🎉 Added</label>
+                <textarea id="changelog-added" rows="3" placeholder="New features (one per line)"></textarea>
+                <small>Enter one item per line</small>
+            </div>
+            <div class="form-group">
+                <label for="changelog-changed">📝 Changed</label>
+                <textarea id="changelog-changed" rows="3" placeholder="Changes (one per line)"></textarea>
+                <small>Enter one item per line</small>
+            </div>
+            <div class="form-group">
+                <label for="changelog-fixed">🐛 Fixed</label>
+                <textarea id="changelog-fixed" rows="3" placeholder="Bug fixes (one per line)"></textarea>
+                <small>Enter one item per line</small>
+            </div>
+            <div class="form-group">
+                <label for="changelog-removed">🗑️ Removed</label>
+                <textarea id="changelog-removed" rows="3" placeholder="Removed features (one per line)"></textarea>
+                <small>Enter one item per line</small>
+            </div>
+            <div class="error-message" id="changelog-form-error"></div>
+            <button type="submit" class="submit-btn">Save Changelog</button>
+        </form>
+    </div>
+</div>
+
+    <script>
+        let loadoutItems = [];
+        let users = [];
+        let changelogEntries = [];
+        let selectedUsers = new Set();
+        let loadoutScreenshots = [];
+        let posts = [];
+        let isEditMode = false;
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+
+                if (!data.authenticated || !data.isAdmin) {
+                    alert('Access denied. Admin privileges required.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                document.getElementById('admin-username').textContent = data.username;
+                loadPosts();
+                loadLoadoutItems();
+                loadUsers();
+                loadChangelog();
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Load all posts
+        async function loadPosts() {
+            try {
+                const response = await fetch('/api/admin/posts');
+                const data = await response.json();
+                posts = data.posts || [];
+                renderPosts();
+            } catch (error) {
+                console.error('Failed to load posts:', error);
+            }
+        }
+
+        // Render posts table
+        function renderPosts() {
+            const tbody = document.getElementById('posts-table-body');
+
+            if (posts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">No posts yet. Create your first post!</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = posts.map(post => `
+                <tr>
+                    <td><strong>${post.title}</strong></td>
+                    <td>${new Date(post.date).toLocaleDateString()}</td>
+                    <td><span style="color: ${post.published ? 'green' : 'orange'}">${post.published ? 'Published' : 'Draft'}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editPost(${post.id})">Edit</button>
+                            <button class="btn-delete" onclick="deletePost(${post.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Open add modal
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById('modal-title').textContent = 'Add New Post';
+            document.getElementById('post-form').reset();
+            document.getElementById('post-id').value = '';
+            document.getElementById('post-date').valueAsDate = new Date();
+            document.getElementById('post-modal').classList.add('active');
+        }
+
+        // Edit post
+        function editPost(id) {
+            const post = posts.find(p => p.id === id);
+            if (!post) return;
+
+            isEditMode = true;
+            document.getElementById('modal-title').textContent = 'Edit Post';
+            document.getElementById('post-id').value = post.id;
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-date').value = post.date;
+            document.getElementById('post-description').value = post.description;
+            document.getElementById('post-content').value = post.content;
+            document.getElementById('post-thumbnail').value = post.thumbnail || '';
+            document.getElementById('post-slug').value = post.slug;
+            document.getElementById('post-modal').classList.add('active');
+        }
+
+        // Delete post
+        async function deletePost(id) {
+            if (!confirm('Are you sure you want to delete this post?')) return;
+
+            try {
+                const response = await fetch(`/api/admin/posts/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Post deleted successfully!');
+                    loadPosts();
+                } else {
+                    alert('Failed to delete post');
+                }
+            } catch (error) {
+                console.error('Delete failed:', error);
+                alert('Network error');
+            }
+        }
+
+        async function loadLoadoutItems() {
+            try {
+                const response = await fetch('/api/admin/loadout');
+                const data = await response.json();
+                loadoutItems = data.items || [];
+                renderLoadoutItems();
+            } catch (error) {
+                console.error('Failed to load loadout items:', error);
+            }
+        }
+
+        function renderLoadoutItems() {
+            const tbody = document.getElementById('loadout-table-body');
+            if (loadoutItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No loadout items yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = loadoutItems.map(item => `
+                <tr>
+                    <td><strong>${escapeHtml(item.weapon_name)}</strong></td>
+                    <td>${escapeHtml(item.skin_name)}</td>
+                    <td>${escapeHtml(item.category)}</td>
+                    <td><span style="color: ${item.side === 't' ? '#F4A460' : item.side === 'ct' ? '#5B9BD5' : '#666'}">${item.side.toUpperCase()}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editLoadout(${item.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteLoadout(${item.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openAddLoadoutModal() {
+            document.getElementById('loadout-modal-title').textContent = 'Add New Loadout Item';
+            document.getElementById('loadout-form').reset();
+            document.getElementById('loadout-id').value = '';
+            loadoutScreenshots = [];
+            renderLoadoutScreenshots();
+            document.getElementById('loadout-modal').classList.add('active');
+        }
+
+        function editLoadout(id) {
+            const item = loadoutItems.find(i => i.id === id);
+            if (!item) return;
+            document.getElementById('loadout-modal-title').textContent = 'Edit Loadout Item';
+            document.getElementById('loadout-id').value = item.id;
+            document.getElementById('loadout-weapon').value = item.weapon_name;
+            document.getElementById('loadout-skin').value = item.skin_name;
+            document.getElementById('loadout-category').value = item.category;
+            document.getElementById('loadout-side').value = item.side;
+            document.getElementById('loadout-float').value = item.float_value || '';
+            document.getElementById('loadout-stattrak').checked = item.stattrak === 1;
+            document.getElementById('loadout-description').value = item.description || '';
+            loadoutScreenshots = item.screenshots || [];
+            renderLoadoutScreenshots();
+            document.getElementById('loadout-modal').classList.add('active');
+        }
+
+        async function deleteLoadout(id) {
+            if (!confirm('Delete this loadout item?')) return;
+            try {
+                const response = await fetch(`/api/admin/loadout/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    alert('Loadout item deleted!');
+                    loadLoadoutItems();
+                } else {
+                    alert('Failed to delete item');
+                }
+            } catch (error) {
+                console.error('Delete failed:', error);
+            }
+        }
+
+        function closeLoadoutModal() {
+            document.getElementById('loadout-modal').classList.remove('active');
+            document.getElementById('loadout-form-error').classList.remove('show');
+        }
+
+        function renderLoadoutScreenshots() {
+            const container = document.getElementById('loadout-screenshots');
+            container.innerHTML = loadoutScreenshots.map((path, index) => `
+                <div class="screenshot-item">
+                    <img src="/${path}" alt="Screenshot ${index + 1}">
+                    <button type="button" class="screenshot-remove" onclick="removeScreenshot(${index})">&times;</button>
+                </div>
+            `).join('');
+        }
+
+        function removeScreenshot(index) {
+            loadoutScreenshots.splice(index, 1);
+            renderLoadoutScreenshots();
+        }
+
+        document.getElementById('loadout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                weapon_name: document.getElementById('loadout-weapon').value,
+                skin_name: document.getElementById('loadout-skin').value,
+                category: document.getElementById('loadout-category').value,
+                side: document.getElementById('loadout-side').value,
+                description: document.getElementById('loadout-description').value,
+                float_value: document.getElementById('loadout-float').value,
+                stattrak: document.getElementById('loadout-stattrak').checked,
+                screenshots: loadoutScreenshots
+            };
+            const itemId = document.getElementById('loadout-id').value;
+            const url = itemId ? `/api/admin/loadout/${itemId}` : '/api/admin/loadout';
+            const method = itemId ? 'PUT' : 'POST';
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                if (response.ok) {
+                    alert(itemId ? 'Loadout item updated!' : 'Loadout item created!');
+                    closeLoadoutModal();
+                    loadLoadoutItems();
+                } else {
+                    const data = await response.json();
+                    showError('loadout-form-error', data.error || 'Failed to save item');
+                }
+            } catch (error) {
+                console.error('Submit failed:', error);
+                showError('loadout-form-error', 'Network error');
+            }
+        });
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('post-modal').classList.remove('active');
+            document.getElementById('form-error').classList.remove('show');
+        }
+
+        async function loadUsers() {
+    try {
+        const response = await fetch('/api/admin/users');
+        const data = await response.json();
+        users = data.users || [];
+        renderUsers();
+    } catch (error) {
+        console.error('Failed to load users:', error);
+    }
+}
+
+        function renderUsers() {
+            const tbody = document.getElementById('users-table-body');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No users yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><input type="checkbox" class="select-checkbox user-checkbox" data-user-id="${user.id}"></td>
+                    <td><strong>${escapeHtml(user.username)}</strong></td>
+                    <td>${user.is_admin ? 'Yes' : 'No'}</td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editUser(${user.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteUser(${user.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', updateUserSelection);
+            });
+        }
+
+        function updateUserSelection() {
+            selectedUsers.clear();
+            document.querySelectorAll('.user-checkbox:checked').forEach(checkbox => {
+                selectedUsers.add(parseInt(checkbox.dataset.userId));
+            });
+            const bulkBtn = document.getElementById('bulk-delete-btn');
+            if (selectedUsers.size > 0) {
+                bulkBtn.classList.add('show');
+            } else {
+                bulkBtn.classList.remove('show');
+            }
+        }
+
+        document.getElementById('select-all-users').addEventListener('change', function() {
+            document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateUserSelection();
+        });
+
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (!user) return;
+            document.getElementById('user-id').value = user.id;
+            document.getElementById('user-username').value = user.username;
+            document.getElementById('user-modal').classList.add('active');
+        }
+
+        async function deleteUser(id) {
+            if (!confirm('Delete this user?')) return;
+            try {
+                const response = await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    alert('User deleted!');
+                    loadUsers();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to delete user');
+                }
+            } catch (error) {
+                console.error('Delete failed:', error);
+            }
+        }
+
+        async function bulkDeleteUsers() {
+            if (selectedUsers.size === 0) return;
+            if (!confirm(`Delete ${selectedUsers.size} user(s)?`)) return;
+            try {
+                const response = await fetch('/api/admin/users/bulk-delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userIds: Array.from(selectedUsers) })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    selectedUsers.clear();
+                    loadUsers();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to delete users');
+                }
+            } catch (error) {
+                console.error('Bulk delete failed:', error);
+            }
+        }
+
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.remove('active');
+            document.getElementById('user-form-error').classList.remove('show');
+        }
+
+        async function loadChangelog() {
+    try {
+        const response = await fetch('/api/admin/changelog');
+        const data = await response.json();
+        changelogEntries = data.entries || [];
+        renderChangelog();
+    } catch (error) {
+        console.error('Failed to load changelog:', error);
+    }
+}
+
+        function renderChangelog() {
+            const tbody = document.getElementById('changelog-table-body');
+            if (changelogEntries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 2rem;">No changelog entries yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = changelogEntries.map(entry => `
+                <tr>
+                    <td><strong>${escapeHtml(entry.version)}</strong></td>
+                    <td>${new Date(entry.date).toLocaleDateString()}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editChangelog(${entry.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteChangelog(${entry.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openAddChangelogModal() {
+            document.getElementById('changelog-modal-title').textContent = 'Add New Changelog';
+            document.getElementById('changelog-form').reset();
+            document.getElementById('changelog-id').value = '';
+            document.getElementById('changelog-date').valueAsDate = new Date();
+            document.getElementById('changelog-modal').classList.add('active');
+        }
+
+        function editChangelog(id) {
+            const entry = changelogEntries.find(e => e.id === id);
+            if (!entry) return;
+            document.getElementById('changelog-modal-title').textContent = 'Edit Changelog';
+            document.getElementById('changelog-id').value = entry.id;
+            document.getElementById('changelog-version').value = entry.version;
+            document.getElementById('changelog-date').value = entry.date;
+            document.getElementById('changelog-added').value = entry.added || '';
+            document.getElementById('changelog-changed').value = entry.changed || '';
+            document.getElementById('changelog-fixed').value = entry.fixed || '';
+            document.getElementById('changelog-removed').value = entry.removed || '';
+            document.getElementById('changelog-modal').classList.add('active');
+        }
+
+        async function deleteChangelog(id) {
+            if (!confirm('Delete this changelog entry?')) return;
+            try {
+                const response = await fetch(`/api/admin/changelog/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    alert('Changelog entry deleted!');
+                    loadChangelog();
+                } else {
+                    alert('Failed to delete entry');
+                }
+            } catch (error) {
+                console.error('Delete failed:', error);
+            }
+        }
+
+        function closeChangelogModal() {
+            document.getElementById('changelog-modal').classList.remove('active');
+            document.getElementById('changelog-form-error').classList.remove('show');
+        }
+
+        document.getElementById('changelog-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                version: document.getElementById('changelog-version').value,
+                date: document.getElementById('changelog-date').value,
+                added: document.getElementById('changelog-added').value,
+                changed: document.getElementById('changelog-changed').value,
+                fixed: document.getElementById('changelog-fixed').value,
+                removed: document.getElementById('changelog-removed').value
+            };
+            const entryId = document.getElementById('changelog-id').value;
+            const url = entryId ? `/api/admin/changelog/${entryId}` : '/api/admin/changelog';
+            const method = entryId ? 'PUT' : 'POST';
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                if (response.ok) {
+                    alert(entryId ? 'Changelog updated!' : 'Changelog created!');
+                    closeChangelogModal();
+                    loadChangelog();
+                } else {
+                    const data = await response.json();
+                    showError('changelog-form-error', data.error || 'Failed to save changelog');
+                }
+            } catch (error) {
+                console.error('Submit failed:', error);
+                showError('changelog-form-error', 'Network error');
+            }
+        });
+
+        function setupFileUpload(uploadAreaId, fileInputId, uploadType, callback) {
+    const uploadArea = document.getElementById(uploadAreaId);
+    const fileInput = document.getElementById(fileInputId);
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileUpload(files, uploadType, callback);
+        }
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileUpload(e.target.files, uploadType, callback);
+        }
+    });
+}
+
+async function handleFileUpload(files, uploadType, callback) {
+    const file = files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('uploadType', uploadType);
+    try {
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+        if (response.ok) {
+            const data = await response.json();
+            callback(data.path);
+        } else {
+            alert('Failed to upload file');
+        }
+    } catch (error) {
+        console.error('Upload failed:', error);
+        alert('Network error during upload');
+    }
+}
+
+async function handleMultipleFileUpload(files, uploadType, callback) {
+    for (let file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('uploadType', uploadType);
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                const data = await response.json();
+                callback(data.path);
+            }
+        } catch (error) {
+            console.error('Upload failed:', error);
+        }
+    }
+}
+
+        // Setup file uploads - call this at the end of your script
+        setupFileUpload('post-thumbnail-upload', 'post-thumbnail-file', 'article', (path) => {
+            document.getElementById('post-thumbnail').value = path;
+            document.getElementById('post-thumbnail-preview').innerHTML = 
+                `<div class="uploaded-file">Uploaded: ${path}</div>`;
+        });
+
+        setupFileUpload('loadout-screenshot-upload', 'loadout-screenshot-file', 'skin', (path) => {
+            loadoutScreenshots.push(path);
+            renderLoadoutScreenshots();
+        });
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        document.getElementById('loadout-screenshot-file').addEventListener('change', async (e) => {
+            if (e.target.files.length > 0) {
+                await handleMultipleFileUpload(e.target.files, 'skin', (path) => {
+                    loadoutScreenshots.push(path);
+                    renderLoadoutScreenshots();
+                });
+            }
+        });
+
+        document.getElementById('user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userId = document.getElementById('user-id').value;
+            const formData = {
+                username: document.getElementById('user-username').value
+            };
+            try {
+                const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                if (response.ok) {
+                    alert('User updated!');
+                    closeUserModal();
+                    loadUsers();
+                } else {
+                    const data = await response.json();
+                    showError('user-form-error', data.error || 'Failed to update user');
+                }
+            } catch (error) {
+                console.error('Submit failed:', error);
+                showError('user-form-error', 'Network error');
+            }
+        });
+
+        // Submit form
+        document.getElementById('post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                title: document.getElementById('post-title').value,
+                date: document.getElementById('post-date').value,
+                description: document.getElementById('post-description').value,
+                content: document.getElementById('post-content').value,
+                thumbnail: document.getElementById('post-thumbnail').value || 'articles/img/default.jpg',
+                slug: document.getElementById('post-slug').value,
+                published: true
+            };
+
+            const postId = document.getElementById('post-id').value;
+            const url = isEditMode ? `/api/admin/posts/${postId}` : '/api/admin/posts';
+            const method = isEditMode ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert(isEditMode ? 'Post updated!' : 'Post created!');
+                    closeModal();
+                    loadPosts();
+                } else {
+                    const data = await response.json();
+                    document.getElementById('form-error').textContent = data.error || 'Failed to save post';
+                    document.getElementById('form-error').classList.add('show');
+                }
+            } catch (error) {
+                console.error('Submit failed:', error);
+                document.getElementById('form-error').textContent = 'Network error';
+                document.getElementById('form-error').classList.add('show');
+            }
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Logout
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+
+        // Initialize
+        checkAuth();
+    </script>
+</body>
+</html>

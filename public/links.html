@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links - Sinsane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cherry-pink: #FFB7C5;
+            --white: #FFFFFF;
+            --black: #000000;
+            --dark-pink: #FF8FA3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        /* Navbar Styles */
+        nav {
+            background-color: var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            gap: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .site-name {
+            color: var(--cherry-pink);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cherry-pink);
+            color: var(--white);
+            background-color: transparent;
+        }
+
+        .auth-btn:hover {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-btn.register {
+            background-color: var(--cherry-pink);
+            color: var(--black);
+        }
+
+        .auth-btn.register:hover {
+            background-color: var(--dark-pink);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* Section Styles */
+        .links-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--cherry-pink);
+        }
+
+        /* Link Card Styles */
+        .links-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background-color: var(--white);
+            border: 2px solid var(--cherry-pink);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--black);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-card:hover {
+            background-color: var(--cherry-pink);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(255, 183, 197, 0.3);
+        }
+
+        .link-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .link-info {
+            flex: 1;
+        }
+
+        .link-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .link-description {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .link-card:hover .link-description {
+            color: var(--black);
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            color: var(--cherry-pink);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .link-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .link-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <span class="site-name">sinsane.org</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="loadout.html">Loadout</a></li>
+            <li><a href="links.html">Links</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="login.html" class="auth-btn">Login</a>
+            <a href="register.html" class="auth-btn register">Register</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="page-header">
+            <h1>Links</h1>
+            <p>Connect with me across the internet</p>
+        </div>
+
+        <!-- Contact Section -->
+        <section class="links-section">
+            <h2 class="section-title">Contact</h2>
+            <div class="links-grid">
+                <a href="#" class="link-card" id="discord-link">
+                    <div class="link-icon">💬</div>
+                    <div class="link-info">
+                        <div class="link-title">Discord</div>
+                        <div class="link-description">username#0000</div>
+                    </div>
+                </a>
+                <a href="mailto:business@sinsane.org" class="link-card">
+                    <div class="link-icon">📧</div>
+                    <div class="link-info">
+                        <div class="link-title">Business Email</div>
+                        <div class="link-description">business@sinsane.org</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Social Media Section -->
+        <section class="links-section">
+            <h2 class="section-title">Social Media</h2>
+            <div class="links-grid">
+                <a href="https://twitter.com/yourusername" class="link-card" target="_blank">
+                    <div class="link-icon">🐦</div>
+                    <div class="link-info">
+                        <div class="link-title">Twitter</div>
+                        <div class="link-description">Follow me on Twitter</div>
+                    </div>
+                </a>
+                <a href="https://youtube.com/@yourchannel" class="link-card" target="_blank">
+                    <div class="link-icon">🎥</div>
+                    <div class="link-info">
+                        <div class="link-title">YouTube</div>
+                        <div class="link-description">Subscribe to my channel</div>
+                    </div>
+                </a>
+                <a href="https://steamcommunity.com/id/yourprofile" class="link-card" target="_blank">
+                    <div class="link-icon">🎮</div>
+                    <div class="link-info">
+                        <div class="link-title">Steam</div>
+                        <div class="link-description">Add me on Steam</div>
+                    </div>
+                </a>
+                <a href="https://www.roblox.com/users/yourprofile" class="link-card" target="_blank">
+                    <div class="link-icon">🟦</div>
+                    <div class="link-info">
+                        <div class="link-title">Roblox</div>
+                        <div class="link-description">Find me on Roblox</div>
+                    </div>
+                </a>
+                <a href="https://twitch.tv/yourchannel" class="link-card" target="_blank">
+                    <div class="link-icon">🟣</div>
+                    <div class="link-info">
+                        <div class="link-title">Twitch</div>
+                        <div class="link-description">Watch my streams</div>
+                    </div>
+                </a>
+                <a href="https://discord.gg/yourserver" class="link-card" target="_blank">
+                    <div class="link-icon">💬</div>
+                    <div class="link-info">
+                        <div class="link-title">Discord Server</div>
+                        <div class="link-description">Join the community</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span class="copyright">Sinsane</span>. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Add active state to current page link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === 'links.html') {
+                link.style.backgroundColor = 'var(--cherry-pink)';
+                link.style.color = 'var(--black)';
+            }
+        });
+
+        // Handle Discord username copy
+        document.getElementById('discord-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const username = 'username#0000'; // Replace with actual Discord username
+            navigator.clipboard.writeText(username).then(() => {
+                const description = this.querySelector('.link-description');
+                const originalText = description.textContent;
+                description.textContent = 'Copied to clipboard!';
+                setTimeout(() => {
+                    description.textContent = originalText;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
